@@ -1,9 +1,4 @@
-import { registerFont, createCanvas, loadImage, type Image } from "canvas";
-
-registerFont("./assets/GothamBold.ttf", { family: "GothamBold" });
-registerFont("./assets/Gotham-Black.otf", { family: "GothamBlack" });
-registerFont("./assets/GothamBook.ttf", { family: "GothamBook" });
-registerFont("./assets/GothamMedium.ttf", { family: "GothamMedium" });
+import { createCanvas, loadImage, type Image } from "canvas";
 
 let rgb2hex = (c: string) =>
   "#" +

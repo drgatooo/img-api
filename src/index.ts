@@ -1,6 +1,12 @@
 import express from "express";
 import cors from "cors";
 import { SpotifyCard } from "./generators/spotify";
+import { registerFont } from "canvas";
+
+registerFont("./assets/GothamBold.ttf", { family: "GothamBold" });
+registerFont("./assets/Gotham-Black.otf", { family: "GothamBlack" });
+registerFont("./assets/GothamBook.ttf", { family: "GothamBook" });
+registerFont("./assets/GothamMedium.ttf", { family: "GothamMedium" });
 
 const app = express();
 app.use(cors());
@@ -9,7 +15,7 @@ app.listen(process.env["PORT"] || 3000, () => {
 });
 
 app.get("/", async (_, res) => {
-  return res.json({ hello: "world" });
+  return res.json({ hello: "world", date: new Date() });
 });
 
 app.get("/music-card", async (req, res) => {

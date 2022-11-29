@@ -21,7 +21,7 @@ app.listen(process.env["PORT"] || 3000, () => {
     console.log("Server is running on port 3000");
 });
 app.get("/", (_, res) => __awaiter(void 0, void 0, void 0, function* () {
-    return res.json({ hello: "world" });
+    return res.json({ hello: "world", date: new Date() });
 }));
 app.get("/music-card", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const cover = req.query["cover"];
