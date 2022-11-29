@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
-const spotify_card_1 = require("spotify-card");
+const spotify_1 = require("./generators/spotify");
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.listen(process.env["PORT"] || 3000, () => {
@@ -23,7 +23,7 @@ app.listen(process.env["PORT"] || 3000, () => {
 app.get("/", (_, res) => __awaiter(void 0, void 0, void 0, function* () {
     return res.json({ hello: "world" });
 }));
-app.get("/spotify-card", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.get("/music-card", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const cover = req.query["cover"];
     const title = req.query["title"];
     const artist = req.query["artist"];
@@ -41,31 +41,10 @@ app.get("/spotify-card", (req, res) => __awaiter(void 0, void 0, void 0, functio
         title: Buffer.from(title, "base64").toString("utf8"),
         artist: Buffer.from(artist, "base64").toString("utf8"),
     };
-    const card = yield (0, spotify_card_1.generate)({
-        blur: {
-            image: false,
-            progress: false,
-            text: false,
-        },
-        adaptiveTextcolor: true,
-        songData: {
-            cover: decoded.cover,
-            title: decoded.title,
-            album: decoded.artist,
-        },
-        platform: "custom",
-        progressBar: false,
-        width: 950,
-        height: 300,
-        margins: {
-            album: 5,
-            title: 5,
-            cover: 20,
-        },
-        defaultMargin: 20,
-        fontSizes: {
-            album: 30,
-        },
+    const card = yield (0, spotify_1.SpotifyCard)({
+        artist: decoded.artist,
+        imageURL: decoded.cover,
+        name: decoded.title,
     });
     res.writeHead(200, {
         "Content-Type": "image/png",

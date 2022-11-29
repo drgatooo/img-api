@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import { generate } from "spotify-card";
+import { SpotifyCard } from "./generators/spotify";
 
 const app = express();
 app.use(cors());
@@ -12,7 +12,7 @@ app.get("/", async (_, res) => {
   return res.json({ hello: "world" });
 });
 
-app.get("/spotify-card", async (req, res) => {
+app.get("/music-card", async (req, res) => {
   const cover = req.query["cover"] as string;
   const title = req.query["title"] as string;
   const artist = req.query["artist"] as string;
@@ -35,31 +35,10 @@ app.get("/spotify-card", async (req, res) => {
     artist: Buffer.from(artist, "base64").toString("utf8"),
   };
 
-  const card = await generate({
-    blur: {
-      image: false,
-      progress: false,
-      text: false,
-    },
-    adaptiveTextcolor: true,
-    songData: {
-      cover: decoded.cover,
-      title: decoded.title,
-      album: decoded.artist,
-    },
-    platform: "custom",
-    progressBar: false,
-    width: 950,
-    height: 300,
-    margins: {
-      album: 5,
-      title: 5,
-      cover: 20,
-    },
-    defaultMargin: 20,
-    fontSizes: {
-      album: 30,
-    },
+  const card = await SpotifyCard({
+    artist: decoded.artist,
+    imageURL: decoded.cover,
+    name: decoded.title,
   });
 
   // send the card as image
