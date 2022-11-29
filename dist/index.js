@@ -37,9 +37,9 @@ app.get("/spotify-card", (req, res) => __awaiter(void 0, void 0, void 0, functio
         return res.status(400).json({ error: "artist is required" });
     }
     const decoded = {
-        cover: atob(cover),
-        title: atob(title),
-        artist: atob(artist),
+        cover: Buffer.from(cover, "base64").toString("utf8"),
+        title: Buffer.from(title, "base64").toString("utf8"),
+        artist: Buffer.from(artist, "base64").toString("utf8"),
     };
     const card = yield (0, spotify_card_1.generate)({
         blur: {
