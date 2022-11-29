@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const spotify_card_1 = require("spotify-card");
 const app = (0, express_1.default)();
-app.listen(3000, () => {
+app.listen(process.env["PORT"] || 3000, () => {
     console.log("Server is running on port 3000");
 });
 app.get("/", (_, res) => __awaiter(void 0, void 0, void 0, function* () {
