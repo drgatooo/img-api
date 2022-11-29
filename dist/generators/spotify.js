@@ -164,7 +164,7 @@ function SpotifyCard(data, listenOn) {
         const imageWidth = 400;
         const imageHeight = 400;
         const songX = 560;
-        const songY = 180;
+        const songY = 200;
         const songNameX = 560;
         const songNameY = 250;
         const songFontMax = "100";
@@ -173,7 +173,7 @@ function SpotifyCard(data, listenOn) {
         let songArtistY = 380;
         const songArtistFontMax = "40";
         const songArtistFontMin = "30";
-        const bottomTextX = 845;
+        const bottomTextX = 805;
         let bottomTextY = 542;
         const bottomTextFont = "20px";
         const text = "SONG";
@@ -187,7 +187,7 @@ function SpotifyCard(data, listenOn) {
         let fontColor = getFontColor(avcolor, avcolor);
         context.fillStyle = fontColor;
         context.font = "bold 22px GothamBlack";
-        var ctext = text.split("").join(String.fromCharCode(8202));
+        let ctext = text.split("").join(String.fromCharCode(8202));
         context.fillText(ctext, songX, songY);
         songArtistY += textWrap(data.name, songFontMax, songFontMin, 580, context, songNameX, songNameY, "bold ", "px GothamBold");
         let downShift = textWrap(data.artist, songArtistFontMax, songArtistFontMin, 500, context, songArtistX, songArtistY, "bold ", "px GothamBook");
