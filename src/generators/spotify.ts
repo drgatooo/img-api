@@ -193,7 +193,7 @@ export async function SpotifyCard(data: SongData, listenOn?: string) {
   const songX = 560;
   const songY = 180;
   const songNameX = 560;
-  const songNameY = 240;
+  const songNameY = 250;
   const songFontMax = "100";
   const songFontMin = "70";
   const songArtistX = 560;

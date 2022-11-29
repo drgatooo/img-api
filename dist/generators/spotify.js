@@ -164,13 +164,13 @@ function SpotifyCard(data, listenOn) {
         const imageWidth = 400;
         const imageHeight = 400;
         const songX = 560;
-        const songY = 200;
+        const songY = 180;
         const songNameX = 560;
         const songNameY = 250;
         const songFontMax = "100";
         const songFontMin = "70";
         const songArtistX = 560;
-        let songArtistY = 400;
+        let songArtistY = 380;
         const songArtistFontMax = "40";
         const songArtistFontMin = "30";
         const bottomTextX = 845;

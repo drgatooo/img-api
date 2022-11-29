@@ -32,6 +32,7 @@ app.get("/music-card", (req, res) => __awaiter(void 0, void 0, void 0, function*
     const cover = req.query["cover"];
     const title = req.query["title"];
     const artist = req.query["artist"];
+    const listenOn = (req.query["listen-on"] || "bWVvbmcgYm90");
     if (!cover) {
         return res.status(400).json({ error: "cover is required" });
     }
@@ -45,12 +46,13 @@ app.get("/music-card", (req, res) => __awaiter(void 0, void 0, void 0, function*
         cover: Buffer.from(cover, "base64").toString("utf8"),
         title: Buffer.from(title, "base64").toString("utf8"),
         artist: Buffer.from(artist, "base64").toString("utf8"),
+        listenOn: Buffer.from(listenOn, "base64").toString("utf8"),
     };
     const card = yield (0, spotify_1.SpotifyCard)({
         artist: decoded.artist,
         imageURL: decoded.cover,
         name: decoded.title,
-    });
+    }, decoded.listenOn);
     res.writeHead(200, {
         "Content-Type": "image/png",
         "Content-Length": card.length,
