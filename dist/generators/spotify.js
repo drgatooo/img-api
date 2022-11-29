@@ -11,10 +11,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SpotifyCard = void 0;
 const canvas_1 = require("canvas");
-(0, canvas_1.registerFont)("./assets/GothamBold.ttf", { family: "GothamBold" });
-(0, canvas_1.registerFont)("./assets/Gotham-Black.otf", { family: "GothamBlack" });
-(0, canvas_1.registerFont)("./assets/GothamBook.ttf", { family: "GothamBook" });
-(0, canvas_1.registerFont)("./assets/GothamMedium.ttf", { family: "GothamMedium" });
 let rgb2hex = (c) => {
     var _a;
     return "#" +
@@ -159,7 +155,7 @@ function textWrap(text, max, min, maxWidth, ctx, x, y, fontPre, fontPost) {
     }
     return 0;
 }
-function SpotifyCard(data) {
+function SpotifyCard(data, listenOn) {
     return __awaiter(this, void 0, void 0, function* () {
         const width = 1200;
         const height = 630;
@@ -170,14 +166,14 @@ function SpotifyCard(data) {
         const songX = 560;
         const songY = 200;
         const songNameX = 560;
-        const songNameY = 310;
+        const songNameY = 250;
         const songFontMax = "100";
         const songFontMin = "70";
         const songArtistX = 560;
         let songArtistY = 400;
         const songArtistFontMax = "40";
         const songArtistFontMin = "30";
-        const bottomTextX = 805;
+        const bottomTextX = 845;
         let bottomTextY = 542;
         const bottomTextFont = "20px";
         const text = "SONG";
@@ -197,7 +193,9 @@ function SpotifyCard(data) {
         let downShift = textWrap(data.artist, songArtistFontMax, songArtistFontMin, 500, context, songArtistX, songArtistY, "bold ", "px GothamBook");
         bottomTextY += downShift;
         context.font = `${bottomTextFont} GothamBold`;
-        var cbottomText = "LISTEN ON".split("").join(String.fromCharCode(8202));
+        var cbottomText = `LISTEN ON ${(listenOn || "MEONG BOT").toUpperCase()}`
+            .split("")
+            .join(String.fromCharCode(8202));
         context.fillText(cbottomText, bottomTextX, bottomTextY);
         context.drawImage(image, imageX, imageY, imageWidth, imageHeight);
         const buffer = canvas.toBuffer("image/png");

@@ -4,5 +4,5 @@ interface SongData {
     artist: string;
     imageURL: string;
 }
-export declare function SpotifyCard(data: SongData): Promise<Buffer>;
+export declare function SpotifyCard(data: SongData, listenOn?: string): Promise<Buffer>;
 export {};

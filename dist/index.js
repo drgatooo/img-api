@@ -15,6 +15,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const spotify_1 = require("./generators/spotify");
+const canvas_1 = require("canvas");
+(0, canvas_1.registerFont)("./assets/GothamBold.ttf", { family: "GothamBold" });
+(0, canvas_1.registerFont)("./assets/Gotham-Black.otf", { family: "GothamBlack" });
+(0, canvas_1.registerFont)("./assets/GothamBook.ttf", { family: "GothamBook" });
+(0, canvas_1.registerFont)("./assets/GothamMedium.ttf", { family: "GothamMedium" });
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.listen(process.env["PORT"] || 3000, () => {

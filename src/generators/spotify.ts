@@ -183,7 +183,7 @@ interface SongData {
   imageURL: string;
 }
 
-export async function SpotifyCard(data: SongData) {
+export async function SpotifyCard(data: SongData, listenOn?: string) {
   const width = 1200;
   const height = 630;
   const imageX = 105;
@@ -193,14 +193,14 @@ export async function SpotifyCard(data: SongData) {
   const songX = 560;
   const songY = 200;
   const songNameX = 560;
-  const songNameY = 310;
+  const songNameY = 250;
   const songFontMax = "100";
   const songFontMin = "70";
   const songArtistX = 560;
   let songArtistY = 400;
   const songArtistFontMax = "40";
   const songArtistFontMin = "30";
-  const bottomTextX = 805;
+  const bottomTextX = 845;
   let bottomTextY = 542;
   const bottomTextFont = "20px";
   const text = "SONG";
@@ -248,7 +248,9 @@ export async function SpotifyCard(data: SongData) {
   bottomTextY += downShift!;
 
   context.font = `${bottomTextFont} GothamBold`;
-  var cbottomText = "LISTEN ON".split("").join(String.fromCharCode(8202));
+  var cbottomText = `LISTEN ON ${(listenOn || "MEONG BOT").toUpperCase()}`
+    .split("")
+    .join(String.fromCharCode(8202));
   context.fillText(cbottomText, bottomTextX, bottomTextY);
 
   context.drawImage(image, imageX, imageY, imageWidth, imageHeight);
