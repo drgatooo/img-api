@@ -1,8 +1,10 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@types/color-thief-node': ^1.0.1
   '@types/express': ^4.17.14
   canvas: ^2.10.2
+  color-thief-node: ^1.0.4
   cors: ^2.8.5
   express: ^4.18.2
   ts-node: ^10.9.1
@@ -11,10 +13,12 @@ specifiers:
 
 dependencies:
   canvas: 2.10.2
+  color-thief-node: 1.0.4
   cors: 2.8.5
   express: 4.18.2
 
 devDependencies:
+  '@types/color-thief-node': 1.0.1
   '@types/express': 4.17.14
   ts-node: 10.9.1_wup25etrarvlqkprac7h35hj7u
   tsconfig-paths: 4.1.0
@@ -84,6 +88,10 @@ packages:
     dependencies:
       '@types/connect': 3.4.35
       '@types/node': 18.11.9
+    dev: true
+
+  /@types/color-thief-node/1.0.1:
+    resolution: {integrity: sha512-UU2pvvjtxvugMdCpoG7If9EqbaeITyczSXymIA/h/Quzbf4HwvT1uBKDG0R42jzHlHGOsRqCRb+RP5Kj1RIBaQ==}
     dev: true
 
   /@types/connect/3.4.35:
@@ -253,6 +261,15 @@ packages:
   /color-support/1.1.3:
     resolution: {integrity: sha512-qiBjkpbMLO/HL68y+lh4q0/O1MZFj2RX6X/KmMa3+gJD3z+WwI1ZzDHysvqHGS3mP6mznPckpXmw1nI9cJjyRg==}
     hasBin: true
+    dev: false
+
+  /color-thief-node/1.0.4:
+    resolution: {integrity: sha512-ZcGpyUnmjJISUjDwRv+DM8ySpT/Jp9BOiEPQfAXWsDF6WT3XAPIPzIRLXdKh4ZbTkhZCvYZgTo8A7hHRvxcUnQ==}
+    dependencies:
+      canvas: 2.10.2
+    transitivePeerDependencies:
+      - encoding
+      - supports-color
     dev: false
 
   /concat-map/0.0.1:

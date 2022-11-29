@@ -1,4 +1,5 @@
-import { createCanvas, loadImage, type Image } from "canvas";
+import { createCanvas, loadImage } from "canvas";
+import { getColorFromURL } from "color-thief-node";
 
 let rgb2hex = (c: string) =>
   "#" +
@@ -6,18 +7,6 @@ let rgb2hex = (c: string) =>
     .match(/\d+/g)
     ?.map((x) => (+x).toString(16).padStart(2, "0"))
     .join("");
-
-function getAverageColor(img: Image): Promise<string> {
-  return new Promise((resolve) => {
-    const tempCanvas = createCanvas(1080, 1080);
-    const tempCtx = tempCanvas.getContext("2d");
-    tempCtx.imageSmoothingEnabled = true;
-    tempCtx.drawImage(img, 0, 0, 1, 1);
-    const rgb = tempCtx.getImageData(0, 0, 1, 1).data.slice(0, 3).join(", ");
-    const hex = rgb2hex(rgb);
-    resolve(hex);
-  });
-}
 
 function textWrap(
   text: string,
@@ -193,7 +182,7 @@ export async function SpotifyCard(data: SongData, listenOn?: string) {
   const songX = 560;
   const songY = 200;
   const songNameX = 560;
-  const songNameY = 250;
+  const songNameY = 270;
   const songFontMax = "100";
   const songFontMin = "70";
   const songArtistX = 560;
@@ -203,36 +192,40 @@ export async function SpotifyCard(data: SongData, listenOn?: string) {
   const bottomTextX = 805;
   let bottomTextY = 542;
   const bottomTextFont = "20px";
-  const text = "SONG";
+  const text = "CANCIÓN";
 
   const canvas = createCanvas(width, height);
   const context = canvas.getContext("2d");
   const image = await loadImage(data.imageURL);
-  const avcolor = await getAverageColor(image);
+  const palette = await getColorFromURL(data.imageURL);
+  const avcolor = rgb2hex(`rgb(${palette.join(",")})`);
+
+  const isBgLight = isLight(avcolor);
 
   context.fillStyle = avcolor;
   context.fillRect(0, 0, width, height);
 
   context.textBaseline = "top";
 
-  let fontColor = getFontColor(avcolor, avcolor);
+  let fontColor = isBgLight ? "#333333" : "#ffffff";
   context.fillStyle = fontColor;
 
-  context.font = "bold 22px GothamBlack";
+  context.font = "bold 22px GothamBold";
   let ctext = text.split("").join(String.fromCharCode(8202));
   context.fillText(ctext, songX, songY);
 
-  songArtistY += textWrap(
-    data.name,
-    songFontMax,
-    songFontMin,
-    580,
-    context,
-    songNameX,
-    songNameY,
-    "bold ",
-    "px GothamBold"
-  )!;
+  songArtistY +=
+    textWrap(
+      data.name,
+      songFontMax,
+      songFontMin,
+      580,
+      context,
+      songNameX,
+      songNameY,
+      "bold ",
+      "px GothamBold"
+    )! - 5;
 
   let downShift = textWrap(
     data.artist,
@@ -248,7 +241,7 @@ export async function SpotifyCard(data: SongData, listenOn?: string) {
   bottomTextY += downShift!;
 
   context.font = `${bottomTextFont} GothamBold`;
-  var cbottomText = `LISTEN ON ${(listenOn || "MEONG BOT").toUpperCase()}`
+  var cbottomText = `ESCUCHA EN ${(listenOn || "MEONG BOT").toUpperCase()}`
     .split("")
     .join(String.fromCharCode(8202));
   context.fillText(cbottomText, bottomTextX, bottomTextY);
@@ -261,76 +254,33 @@ export async function SpotifyCard(data: SongData, listenOn?: string) {
   return img;
 }
 
-function getFontColor(bgcolor: string, averagecolor: string) {
-  // checking if white works
-  let e = deltaE(hexToRgb(bgcolor), hexToRgb("FFFFFF"));
-  if (e < 10) {
-    // checking if average color works
-    e = deltaE(hexToRgb(bgcolor), hexToRgb(averagecolor));
-    if (e < 10) {
-      return "#000000";
-    } else {
-      return averagecolor;
-    }
+export const isLight = (color: string) => {
+  let r: any, g: any, b: any, color_match: any, hsp: number;
+  // Check the format of the color, HEX or RGB?
+  if (color.match(/^rgb/)) {
+    // If HEX --> store the red, green, blue values in separate letiables
+    color_match = color.match(
+      /^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)$/
+    );
+
+    r = color_match[1];
+    g = color_match[2];
+    b = color_match[3];
   } else {
-    return "#FFFFFF";
+    // If RGB --> Convert it to HEX: http://gist.github.com/983661
+    color_match = +(
+      // @ts-ignore
+      ("0x" + color.slice(1).replace(color.length < 5 && /./g, "$&$&"))
+    );
+
+    r = color_match >> 16;
+    g = (color_match >> 8) & 255;
+    b = color_match & 255;
   }
-}
 
-function deltaE(
-  rgbA: [number, number, number],
-  rgbB: [number, number, number]
-) {
-  let labA = rgb2lab(rgbA);
-  let labB = rgb2lab(rgbB);
-  let deltaL = labA[0] - labB[0];
-  let deltaA = labA[1] - labB[1];
-  let deltaB = labA[2] - labB[2];
-  let c1 = Math.sqrt(labA[1] * labA[1] + labA[2] * labA[2]);
-  let c2 = Math.sqrt(labB[1] * labB[1] + labB[2] * labB[2]);
-  let deltaC = c1 - c2;
-  let deltaH = deltaA * deltaA + deltaB * deltaB - deltaC * deltaC;
-  deltaH = deltaH < 0 ? 0 : Math.sqrt(deltaH);
-  let sc = 1.0 + 0.045 * c1;
-  let sh = 1.0 + 0.015 * c1;
-  let deltaLKlsl = deltaL / 1.0;
-  let deltaCkcsc = deltaC / sc;
-  let deltaHkhsh = deltaH / sh;
-  let i =
-    deltaLKlsl * deltaLKlsl + deltaCkcsc * deltaCkcsc + deltaHkhsh * deltaHkhsh;
-  return i < 0 ? 0 : Math.sqrt(i);
-}
+  // HSP (Highly Sensitive Poo) equation from http://alienryderflex.com/hsp.html
+  hsp = Math.sqrt(0.299 * (r * r) + 0.587 * (g * g) + 0.114 * (b * b));
 
-function rgb2lab(rgb: [number, number, number]): [number, number, number] {
-  let r = rgb[0] / 255,
-    g = rgb[1] / 255,
-    b = rgb[2] / 255,
-    x,
-    y,
-    z;
-  r = r > 0.04045 ? Math.pow((r + 0.055) / 1.055, 2.4) : r / 12.92;
-  g = g > 0.04045 ? Math.pow((g + 0.055) / 1.055, 2.4) : g / 12.92;
-  b = b > 0.04045 ? Math.pow((b + 0.055) / 1.055, 2.4) : b / 12.92;
-  x = (r * 0.4124 + g * 0.3576 + b * 0.1805) / 0.95047;
-  y = (r * 0.2126 + g * 0.7152 + b * 0.0722) / 1.0;
-  z = (r * 0.0193 + g * 0.1192 + b * 0.9505) / 1.08883;
-  x = x > 0.008856 ? Math.pow(x, 1 / 3) : 7.787 * x + 16 / 116;
-  y = y > 0.008856 ? Math.pow(y, 1 / 3) : 7.787 * y + 16 / 116;
-  z = z > 0.008856 ? Math.pow(z, 1 / 3) : 7.787 * z + 16 / 116;
-  return [116 * y - 16, 500 * (x - y), 200 * (y - z)];
-}
-
-function hexToRgb(hex: string): [number, number, number] {
-  // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
-  var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-  hex = hex.replace(shorthandRegex, function (_, r, g, b) {
-    return r + r + g + g + b + b;
-  });
-
-  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return [
-    parseInt(result![1]!, 16),
-    parseInt(result![2]!, 16),
-    parseInt(result![3]!, 16),
-  ];
-}
+  // Using the HSP value, determine whether the color is light or dark
+  return hsp > 127.5;
+};
