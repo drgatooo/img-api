@@ -22,6 +22,7 @@ app.get("/music-card", async (req, res) => {
   const cover = req.query["cover"] as string;
   const title = req.query["title"] as string;
   const artist = req.query["artist"] as string;
+  const listenOn = (req.query["listen-on"] || "bWVvbmcgYm90") as string;
 
   if (!cover) {
     return res.status(400).json({ error: "cover is required" });
@@ -39,13 +40,17 @@ app.get("/music-card", async (req, res) => {
     cover: Buffer.from(cover, "base64").toString("utf8"),
     title: Buffer.from(title, "base64").toString("utf8"),
     artist: Buffer.from(artist, "base64").toString("utf8"),
+    listenOn: Buffer.from(listenOn, "base64").toString("utf8"),
   };
 
-  const card = await SpotifyCard({
-    artist: decoded.artist,
-    imageURL: decoded.cover,
-    name: decoded.title,
-  });
+  const card = await SpotifyCard(
+    {
+      artist: decoded.artist,
+      imageURL: decoded.cover,
+      name: decoded.title,
+    },
+    decoded.listenOn
+  );
 
   // send the card as image
   res.writeHead(200, {
