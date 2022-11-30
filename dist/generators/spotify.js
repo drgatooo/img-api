@@ -154,11 +154,11 @@ function SpotifyCard(data, listenOn) {
         const imageWidth = 400;
         const imageHeight = 400;
         const songX = 560;
-        const songY = 200;
+        let songY = 200;
         const songNameX = 560;
-        const songNameY = 270;
-        const songFontMax = "100";
-        const songFontMin = "70";
+        let songNameY = 250;
+        const songFontMax = "80";
+        const songFontMin = "65";
         const songArtistX = 560;
         let songArtistY = 380;
         const songArtistFontMax = "40";
@@ -178,15 +178,18 @@ function SpotifyCard(data, listenOn) {
         context.textBaseline = "top";
         let fontColor = isBgLight ? "#333333" : "#ffffff";
         context.fillStyle = fontColor;
+        data.name.length < 10 ? (songNameY += 10) : void 0;
+        data.name.length < 10 ? (songArtistY -= 5) : void 0;
+        const songNameWrap = textWrap(data.name, songFontMax, songFontMin, 550, context, songNameX, songNameY, "bold ", "px GothamBold");
+        songArtistY += songNameWrap - 10;
+        songY -= 5;
         context.font = "bold 22px GothamBold";
         let ctext = text.split("").join(String.fromCharCode(8202));
         context.fillText(ctext, songX, songY);
-        songArtistY +=
-            textWrap(data.name, songFontMax, songFontMin, 580, context, songNameX, songNameY, "bold ", "px GothamBold") - 5;
         let downShift = textWrap(data.artist, songArtistFontMax, songArtistFontMin, 500, context, songArtistX, songArtistY, "bold ", "px GothamBook");
         bottomTextY += downShift;
         context.font = `${bottomTextFont} GothamBold`;
-        var cbottomText = `ESCUCHA EN ${(listenOn || "MEONG BOT").toUpperCase()}`
+        var cbottomText = `ESCUCHAR EN ${(listenOn || "MEONG BOT").toUpperCase()}`
             .split("")
             .join(String.fromCharCode(8202));
         context.fillText(cbottomText, bottomTextX, bottomTextY);
