@@ -28,10 +28,11 @@ app.listen(process.env["PORT"] || 3000, () => {
 app.get("/", (_, res) => __awaiter(void 0, void 0, void 0, function* () {
     return res.json({ hello: "world", date: new Date() });
 }));
-app.get("/music-card", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.get("/v1/music-card", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const cover = req.query["cover"];
     const title = req.query["title"];
     const artist = req.query["artist"];
+    const orientation = req.query["orientation"];
     const listenOn = (req.query["listen-on"] || "bWVvbmcgYm90");
     if (!cover) {
         return res.status(400).json({ error: "cover is required" });
@@ -47,12 +48,50 @@ app.get("/music-card", (req, res) => __awaiter(void 0, void 0, void 0, function*
         title: Buffer.from(title, "base64").toString("utf8"),
         artist: Buffer.from(artist, "base64").toString("utf8"),
         listenOn: Buffer.from(listenOn, "base64").toString("utf8"),
+        orientation: orientation || "landscape",
     };
     const card = yield (0, spotify_1.SpotifyCard)({
         artist: decoded.artist,
-        imageURL: decoded.cover,
+        cover: decoded.cover,
         name: decoded.title,
-    }, decoded.listenOn);
+        text: "canción",
+        listenOn: "meong bot",
+    }, undefined, decoded.orientation, undefined);
+    res.writeHead(200, {
+        "Content-Type": "image/png",
+        "Content-Length": card.length,
+    });
+    return res.end(card);
+}));
+app.get("/v1/playlist-card", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const cover = req.query["cover"];
+    const title = req.query["title"];
+    const owner = req.query["owner"];
+    const orientation = req.query["orientation"];
+    const listenOn = (req.query["listen-on"] || "bWVvbmcgYm90");
+    if (!cover) {
+        return res.status(400).json({ error: "cover is required" });
+    }
+    if (!title) {
+        return res.status(400).json({ error: "title is required" });
+    }
+    if (!owner) {
+        return res.status(400).json({ error: "owner is required" });
+    }
+    const decoded = {
+        cover: Buffer.from(cover, "base64").toString("utf8"),
+        title: Buffer.from(title, "base64").toString("utf8"),
+        owner: Buffer.from(owner, "base64").toString("utf8"),
+        listenOn: Buffer.from(listenOn, "base64").toString("utf8"),
+        orientation: orientation || "square",
+    };
+    const card = yield (0, spotify_1.SpotifyCard)({
+        artist: decoded.owner,
+        cover: decoded.cover,
+        name: decoded.title,
+        text: "playlist",
+        listenOn: "meong bot",
+    }, undefined, decoded.orientation, undefined);
     res.writeHead(200, {
         "Content-Type": "image/png",
         "Content-Length": card.length,

@@ -2,8 +2,9 @@
 interface SongData {
     name: string;
     artist: string;
-    imageURL: string;
+    cover: string;
+    text?: "canción" | "playlist";
+    listenOn?: string;
 }
-export declare function SpotifyCard(data: SongData, listenOn?: string): Promise<Buffer>;
-export declare const isLight: (color: string) => boolean;
+export declare function SpotifyCard(data: SongData, color: any, orientation: "portrait" | "square" | "landscape", colorGiven: any): Promise<Buffer>;
 export {};

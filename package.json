@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "main": "dist/index.js",
   "scripts": {
-    "start": "node dist/index"
+    "start": "node dist/index",
+    "dev": "ts-node --transpile-only src"
   },
   "devDependencies": {
     "@types/color-thief-node": "^1.0.1",

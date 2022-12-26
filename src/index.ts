@@ -18,10 +18,15 @@ app.get("/", async (_, res) => {
   return res.json({ hello: "world", date: new Date() });
 });
 
-app.get("/music-card", async (req, res) => {
+app.get("/v1/music-card", async (req, res) => {
   const cover = req.query["cover"] as string;
   const title = req.query["title"] as string;
   const artist = req.query["artist"] as string;
+  const orientation = req.query["orientation"] as
+    | "square"
+    | "portrait"
+    | "landscape"
+    | undefined;
   const listenOn = (req.query["listen-on"] || "bWVvbmcgYm90") as string;
 
   if (!cover) {
@@ -41,15 +46,72 @@ app.get("/music-card", async (req, res) => {
     title: Buffer.from(title, "base64").toString("utf8"),
     artist: Buffer.from(artist, "base64").toString("utf8"),
     listenOn: Buffer.from(listenOn, "base64").toString("utf8"),
+    orientation: orientation || "landscape",
   };
 
   const card = await SpotifyCard(
     {
       artist: decoded.artist,
-      imageURL: decoded.cover,
+      cover: decoded.cover,
       name: decoded.title,
+      text: "canción",
+      listenOn: "meong bot",
     },
-    decoded.listenOn
+    undefined,
+    decoded.orientation,
+    undefined
+  );
+
+  // send the card as image
+  res.writeHead(200, {
+    "Content-Type": "image/png",
+    "Content-Length": card.length,
+  });
+  return res.end(card);
+});
+
+app.get("/v1/playlist-card", async (req, res) => {
+  const cover = req.query["cover"] as string;
+  const title = req.query["title"] as string;
+  const owner = req.query["owner"] as string;
+  const orientation = req.query["orientation"] as
+    | "square"
+    | "portrait"
+    | "landscape"
+    | undefined;
+  const listenOn = (req.query["listen-on"] || "bWVvbmcgYm90") as string;
+
+  if (!cover) {
+    return res.status(400).json({ error: "cover is required" });
+  }
+
+  if (!title) {
+    return res.status(400).json({ error: "title is required" });
+  }
+
+  if (!owner) {
+    return res.status(400).json({ error: "owner is required" });
+  }
+
+  const decoded = {
+    cover: Buffer.from(cover, "base64").toString("utf8"),
+    title: Buffer.from(title, "base64").toString("utf8"),
+    owner: Buffer.from(owner, "base64").toString("utf8"),
+    listenOn: Buffer.from(listenOn, "base64").toString("utf8"),
+    orientation: orientation || "square",
+  };
+
+  const card = await SpotifyCard(
+    {
+      artist: decoded.owner,
+      cover: decoded.cover,
+      name: decoded.title,
+      text: "playlist",
+      listenOn: "meong bot",
+    },
+    undefined,
+    decoded.orientation,
+    undefined
   );
 
   // send the card as image
