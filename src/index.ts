@@ -7,6 +7,7 @@ registerFont("./assets/GothamBold.ttf", { family: "GothamBold" });
 registerFont("./assets/Gotham-Black.otf", { family: "GothamBlack" });
 registerFont("./assets/GothamBook.ttf", { family: "GothamBook" });
 registerFont("./assets/GothamMedium.ttf", { family: "GothamMedium" });
+registerFont("./assets/seguiemj.ttf", { family: "segoe-ui-emoji" });
 
 const app = express();
 app.use(cors());

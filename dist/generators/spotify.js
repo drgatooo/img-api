@@ -57,8 +57,8 @@ function SpotifyCard(data, color, orientation, colorGiven) {
             bottomTextX = 805;
             bottomTextY = 542;
             bottomTextFont = "20px";
-            dmX = 960;
-            dmY = 520;
+            dmX = 975;
+            dmY = 540;
             dmW = 199.64;
             dmH = 60;
         }
@@ -75,8 +75,8 @@ function SpotifyCard(data, color, orientation, colorGiven) {
             songArtistX = 70;
             songArtistY = 160;
             songArtistFont = "68px";
-            bottomTextX = 815;
-            bottomTextY = 850;
+            bottomTextX = 795;
+            bottomTextY = 870;
             bottomTextFont = "30px";
             dmX = 795;
             dmY = 920;
@@ -102,8 +102,8 @@ function SpotifyCard(data, color, orientation, colorGiven) {
             songArtistFont = "bold 60px";
             songArtistFontMax = "60";
             songArtistFontMin = "40";
-            bottomTextX = 475;
-            bottomTextY = 1800;
+            bottomTextX = 425;
+            bottomTextY = 1780;
             bottomTextFont = "40px";
             dmX = 770;
             dmY = 1780;
@@ -115,50 +115,51 @@ function SpotifyCard(data, color, orientation, colorGiven) {
         artistList.push(data.artist);
         const canvas = (0, canvas_1.createCanvas)(width, height);
         const context = canvas.getContext("2d");
-        const image = yield (0, canvas_1.loadImage)(imageURL);
+        const image = yield (0, canvas_1.loadImage)(data.cover);
         const avcolor = yield getAverageColor(image);
         if (!colorGiven) {
             color = avcolor;
         }
         context.fillStyle = color;
         context.fillRect(0, 0, width, height);
+        context.drawImage(image, imageX, imageY, imageWidth, imageHeight);
         context.textBaseline = "top";
         const fontColor = getFontColor(color, avcolor);
         context.fillStyle = fontColor;
         if (orientation === "landscape") {
-            context.font = "bold 22px GothamBlack";
+            context.font = "bold 22px GothamBlack, segoe-ui-emoji";
             var ctext = text.split("").join(String.fromCharCode(8202));
             context.fillText(ctext, songX, songY);
         }
         else if (orientation == "portrait") {
-            context.font = "bold 40px GothamBlack";
+            context.font = "bold 40px GothamBlack, segoe-ui-emoji";
             var ctext = text.split("").join(String.fromCharCode(8202));
             context.fillText(ctext, songX, songY);
         }
         if (orientation === "landscape") {
-            songArtistY += textWrap(songName, songFontMax, songFontMin, 580, context, songNameX, songNameY, "bold ", "px GothamBold");
+            songArtistY += textWrap(songName, songFontMax, songFontMin, 580, context, songNameX, songNameY, "bold ", "px GothamBold, segoe-ui-emoji");
         }
         else if (orientation === "portrait") {
-            songArtistY += textWrap(songName, songFontMax, songFontMin, 850, context, songNameX, songNameY, "bold ", "px GothamBold");
+            songArtistY += textWrap(songName, songFontMax, songFontMin, 850, context, songNameX, songNameY, "bold ", "px GothamBold, segoe-ui-emoji");
         }
         else {
-            context.font = `${songFont} GothamBold`;
+            context.font = `${songFont} GothamBold, segoe-ui-emoji`;
             context.fillText(songName, songNameX, songNameY);
         }
         artistString = artistList.join(", ");
         if (orientation === "landscape") {
-            let downShift = textWrap(artistString, songArtistFontMax, songArtistFontMin, 500, context, songArtistX, songArtistY, "bold ", "px GothamBook");
+            let downShift = textWrap(artistString, songArtistFontMax, songArtistFontMin, 500, context, songArtistX, songArtistY, "bold ", "px GothamBook, segoe-ui-emoji");
             bottomTextY += downShift;
             dmY += downShift;
         }
         else if (orientation === "portrait") {
-            textWrap(artistString, songArtistFontMax, songArtistFontMin, 500, context, songArtistX, songArtistY, "bold ", "px GothamBook");
+            textWrap(artistString, songArtistFontMax, songArtistFontMin, 500, context, songArtistX, songArtistY, "bold ", "px GothamBook, segoe-ui-emoji");
         }
         else {
-            context.font = `${songArtistFont} GothamBook`;
+            context.font = `${songArtistFont} GothamBook, segoe-ui-emoji`;
             context.fillText(artistString, songArtistX, songArtistY);
         }
-        context.font = `${bottomTextFont} GothamBold`;
+        context.font = `${bottomTextFont} GothamBold, segoe-ui-emoji`;
         var cbottomText = bottomText.split("").join(String.fromCharCode(8202));
         context.fillText(cbottomText, bottomTextX, bottomTextY);
         context.fillText((data.listenOn || "meong bot").toUpperCase(), dmX, dmY);

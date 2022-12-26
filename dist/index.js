@@ -20,6 +20,7 @@ const canvas_1 = require("canvas");
 (0, canvas_1.registerFont)("./assets/Gotham-Black.otf", { family: "GothamBlack" });
 (0, canvas_1.registerFont)("./assets/GothamBook.ttf", { family: "GothamBook" });
 (0, canvas_1.registerFont)("./assets/GothamMedium.ttf", { family: "GothamMedium" });
+(0, canvas_1.registerFont)("./assets/seguiemj.ttf", { family: "segoe-ui-emoji" });
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.listen(process.env["PORT"] || 3000, () => {
