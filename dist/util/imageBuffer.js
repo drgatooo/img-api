@@ -16,37 +16,38 @@ exports.loadImageFromBuffer = exports.crop1x1 = exports.getImageBuffer = void 0;
 const axios_1 = __importDefault(require("axios"));
 const sharp_1 = __importDefault(require("sharp"));
 const canvas_1 = __importDefault(require("canvas"));
+const fs_1 = __importDefault(require("fs"));
 function getImageBuffer(imgURL, fallback) {
-    return new Promise((resolve) => __awaiter(this, void 0, void 0, function* () {
+    return __awaiter(this, void 0, void 0, function* () {
         try {
-            const res = yield axios_1.default.get(imgURL, { responseType: "arraybuffer" });
-            const image = Buffer.from(res.data, "binary");
-            const format = yield (0, sharp_1.default)(image)
-                .metadata()
-                .then((metadata) => metadata.format);
-            if (format === "webp") {
-                (0, sharp_1.default)(image)
-                    .png()
-                    .toBuffer()
-                    .then((buffer) => resolve(buffer));
+            const response = yield axios_1.default.get(imgURL, { responseType: "arraybuffer" });
+            const buffer = Buffer.from(response.data, "binary");
+            if (response.headers["content-type"] === "image/webp") {
+                return yield (0, sharp_1.default)(buffer).png().toBuffer();
             }
-            else {
-                resolve(image);
-            }
+            return buffer;
         }
-        catch (err) {
-            console.log(err);
-            resolve(Buffer.from(fallback, "base64"));
+        catch (error) {
+            return fs_1.default.readFileSync(fallback);
         }
-    }));
+    });
 }
 exports.getImageBuffer = getImageBuffer;
 function crop1x1(buffer) {
-    return new Promise((resolve) => {
-        (0, sharp_1.default)(buffer)
-            .resize({ width: 1, height: 1, fit: "cover" })
-            .toBuffer()
-            .then((buffer) => resolve(buffer));
+    return __awaiter(this, void 0, void 0, function* () {
+        const image = yield loadImageFromBuffer(buffer);
+        const canvas = canvas_1.default.createCanvas(image.width, image.height);
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(image, 0, 0);
+        const width = image.width;
+        const height = image.height;
+        const size = Math.min(width, height);
+        const x = (width - size) / 2;
+        const y = (height - size) / 2;
+        const croppedCanvas = canvas_1.default.createCanvas(size, size);
+        const croppedCtx = croppedCanvas.getContext("2d");
+        croppedCtx.drawImage(canvas, x, y, size, size, 0, 0, size, size);
+        return yield (0, sharp_1.default)(croppedCanvas.toBuffer("image/png")).png().toBuffer();
     });
 }
 exports.crop1x1 = crop1x1;

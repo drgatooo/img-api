@@ -1,7 +1,7 @@
 import axios from "axios";
 import sharp from "sharp";
 import Canvas from "canvas";
-import fs from "node:fs";
+import fs from "fs";
 
 /**
  * get image buffer from url. if image is webp, convert it to png. if image is invalid or not found, use fallback image

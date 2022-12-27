@@ -118,7 +118,7 @@ function SpotifyCard(data, color, orientation, colorGiven) {
         const context = canvas.getContext("2d");
         const imgBuffer = yield (0, imageBuffer_1.getImageBuffer)(imageURL, "./assets/fallback.png");
         const cropped = yield (0, imageBuffer_1.crop1x1)(imgBuffer);
-        const image = yield (0, imageBuffer_1.loadImageFromBuffer)(cropped);
+        const image = yield (0, canvas_1.loadImage)(cropped);
         const avcolor = yield getAverageColor(image);
         if (!colorGiven) {
             color = avcolor;
