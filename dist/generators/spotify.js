@@ -49,12 +49,12 @@ function SpotifyCard(data, color, orientation, colorGiven) {
             songNameY = 250;
             songFont = "bold 100px";
             songFontMax = "100";
-            songFontMin = "70";
+            songFontMin = "55";
             songArtistX = 560;
             songArtistY = 380;
             songArtistFont = "bold 40px";
             songArtistFontMax = "40";
-            songArtistFontMin = "30";
+            songArtistFontMin = "25";
             bottomTextX = 805;
             bottomTextY = 542;
             bottomTextFont = "20px";
@@ -97,7 +97,7 @@ function SpotifyCard(data, color, orientation, colorGiven) {
             songNameY = 1215;
             songFont = "bold 150px";
             songFontMax = "150";
-            songFontMin = "130";
+            songFontMin = "65";
             songArtistX = 115;
             songArtistY = 1390;
             songArtistFont = "bold 60px";
