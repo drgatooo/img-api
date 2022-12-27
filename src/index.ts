@@ -50,25 +50,31 @@ app.get("/v1/music-card", async (req, res) => {
     orientation: orientation || "landscape",
   };
 
-  const card = await SpotifyCard(
-    {
-      artist: decoded.artist,
-      cover: decoded.cover,
-      name: decoded.title,
-      text: "canción",
-      listenOn: "meong bot",
-    },
-    undefined,
-    decoded.orientation,
-    undefined
-  );
+  try {
+    const card = await SpotifyCard(
+      {
+        artist: decoded.artist,
+        cover: decoded.cover,
+        name: decoded.title,
+        text: "canción",
+        listenOn: "meong bot",
+      },
+      undefined,
+      decoded.orientation,
+      undefined
+    );
 
-  // send the card as image
-  res.writeHead(200, {
-    "Content-Type": "image/png",
-    "Content-Length": card.length,
-  });
-  return res.end(card);
+    // send the card as image
+    res.writeHead(200, {
+      "Content-Type": "image/png",
+      "Content-Length": card.length,
+    });
+    return res.end(card);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ error: (error as Error).message ?? `${error}` });
+  }
 });
 
 app.get("/v1/playlist-card", async (req, res) => {
@@ -102,23 +108,29 @@ app.get("/v1/playlist-card", async (req, res) => {
     orientation: orientation || "square",
   };
 
-  const card = await SpotifyCard(
-    {
-      artist: decoded.owner,
-      cover: decoded.cover,
-      name: decoded.title,
-      text: "playlist",
-      listenOn: "meong bot",
-    },
-    undefined,
-    decoded.orientation,
-    undefined
-  );
+  try {
+    const card = await SpotifyCard(
+      {
+        artist: decoded.owner,
+        cover: decoded.cover,
+        name: decoded.title,
+        text: "playlist",
+        listenOn: "meong bot",
+      },
+      undefined,
+      decoded.orientation,
+      undefined
+    );
 
-  // send the card as image
-  res.writeHead(200, {
-    "Content-Type": "image/png",
-    "Content-Length": card.length,
-  });
-  return res.end(card);
+    // send the card as image
+    res.writeHead(200, {
+      "Content-Type": "image/png",
+      "Content-Length": card.length,
+    });
+    return res.end(card);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ error: (error as Error).message ?? `${error}` });
+  }
 });

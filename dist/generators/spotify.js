@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SpotifyCard = void 0;
 const canvas_1 = require("canvas");
+const imageBuffer_1 = require("../util/imageBuffer");
 let rgb2hex = (c) => "#" + c.match(/\d+/g).map((x) => (+x).toString(16).padStart(2, 0)).join ``;
 function getAverageColor(img) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -115,7 +116,9 @@ function SpotifyCard(data, color, orientation, colorGiven) {
         artistList.push(data.artist);
         const canvas = (0, canvas_1.createCanvas)(width, height);
         const context = canvas.getContext("2d");
-        const image = yield (0, canvas_1.loadImage)(data.cover);
+        const imgBuffer = yield (0, imageBuffer_1.getImageBuffer)(imageURL, "./assets/fallback.png");
+        const cropped = yield (0, imageBuffer_1.crop1x1)(imgBuffer);
+        const image = yield (0, imageBuffer_1.loadImageFromBuffer)(cropped);
         const avcolor = yield getAverageColor(image);
         if (!colorGiven) {
             color = avcolor;

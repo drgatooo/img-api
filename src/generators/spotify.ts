@@ -1,5 +1,10 @@
 // @ts-nocheck
 import { createCanvas, loadImage } from "canvas";
+import {
+  crop1x1,
+  getImageBuffer,
+  loadImageFromBuffer,
+} from "../util/imageBuffer";
 
 interface SongData {
   name: string;
@@ -24,7 +29,6 @@ async function getAverageColor(img) {
   });
 }
 
-// Function, Name, Color
 export async function SpotifyCard(
   data: SongData,
   color,
@@ -149,7 +153,12 @@ export async function SpotifyCard(
 
   const canvas = createCanvas(width, height);
   const context = canvas.getContext("2d");
-  const image = await loadImage(data.cover);
+
+  const imgBuffer = await getImageBuffer(imageURL, "./assets/fallback.png");
+
+  const cropped = await crop1x1(imgBuffer);
+  const image = await loadImage(cropped);
+
   const avcolor = await getAverageColor(image);
   if (!colorGiven) {
     color = avcolor;

@@ -30,6 +30,7 @@ app.get("/", (_, res) => __awaiter(void 0, void 0, void 0, function* () {
     return res.json({ hello: "world", date: new Date() });
 }));
 app.get("/v1/music-card", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     const cover = req.query["cover"];
     const title = req.query["title"];
     const artist = req.query["artist"];
@@ -51,20 +52,28 @@ app.get("/v1/music-card", (req, res) => __awaiter(void 0, void 0, void 0, functi
         listenOn: Buffer.from(listenOn, "base64").toString("utf8"),
         orientation: orientation || "landscape",
     };
-    const card = yield (0, spotify_1.SpotifyCard)({
-        artist: decoded.artist,
-        cover: decoded.cover,
-        name: decoded.title,
-        text: "canción",
-        listenOn: "meong bot",
-    }, undefined, decoded.orientation, undefined);
-    res.writeHead(200, {
-        "Content-Type": "image/png",
-        "Content-Length": card.length,
-    });
-    return res.end(card);
+    try {
+        const card = yield (0, spotify_1.SpotifyCard)({
+            artist: decoded.artist,
+            cover: decoded.cover,
+            name: decoded.title,
+            text: "canción",
+            listenOn: "meong bot",
+        }, undefined, decoded.orientation, undefined);
+        res.writeHead(200, {
+            "Content-Type": "image/png",
+            "Content-Length": card.length,
+        });
+        return res.end(card);
+    }
+    catch (error) {
+        return res
+            .status(500)
+            .json({ error: (_a = error.message) !== null && _a !== void 0 ? _a : `${error}` });
+    }
 }));
 app.get("/v1/playlist-card", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _b;
     const cover = req.query["cover"];
     const title = req.query["title"];
     const owner = req.query["owner"];
@@ -86,16 +95,23 @@ app.get("/v1/playlist-card", (req, res) => __awaiter(void 0, void 0, void 0, fun
         listenOn: Buffer.from(listenOn, "base64").toString("utf8"),
         orientation: orientation || "square",
     };
-    const card = yield (0, spotify_1.SpotifyCard)({
-        artist: decoded.owner,
-        cover: decoded.cover,
-        name: decoded.title,
-        text: "playlist",
-        listenOn: "meong bot",
-    }, undefined, decoded.orientation, undefined);
-    res.writeHead(200, {
-        "Content-Type": "image/png",
-        "Content-Length": card.length,
-    });
-    return res.end(card);
+    try {
+        const card = yield (0, spotify_1.SpotifyCard)({
+            artist: decoded.owner,
+            cover: decoded.cover,
+            name: decoded.title,
+            text: "playlist",
+            listenOn: "meong bot",
+        }, undefined, decoded.orientation, undefined);
+        res.writeHead(200, {
+            "Content-Type": "image/png",
+            "Content-Length": card.length,
+        });
+        return res.end(card);
+    }
+    catch (error) {
+        return res
+            .status(500)
+            .json({ error: (_b = error.message) !== null && _b !== void 0 ? _b : `${error}` });
+    }
 }));
