@@ -174,11 +174,11 @@ export async function SpotifyCard(
   const fontColor = getFontColor(color, avcolor);
   context.fillStyle = fontColor;
   if (orientation === "landscape") {
-    context.font = "bold 22px GothamBlack, segoe-ui-emoji";
+    context.font = 'bold 22px GothamBlack, "Arial Unicode MS", segoe-ui-emoji';
     var ctext = text.split("").join(String.fromCharCode(8202));
     context.fillText(ctext, songX, songY);
   } else if (orientation == "portrait") {
-    context.font = "bold 40px GothamBlack, segoe-ui-emoji";
+    context.font = 'bold 40px GothamBlack, "Arial Unicode MS", segoe-ui-emoji';
     var ctext = text.split("").join(String.fromCharCode(8202));
     context.fillText(ctext, songX, songY);
   }
@@ -193,7 +193,7 @@ export async function SpotifyCard(
       songNameX,
       songNameY,
       "bold ",
-      "px GothamBold, segoe-ui-emoji"
+      'px GothamBold, "Arial Unicode MS", segoe-ui-emoji'
     );
   } else if (orientation === "portrait") {
     songArtistY += textWrap(
@@ -205,10 +205,10 @@ export async function SpotifyCard(
       songNameX,
       songNameY,
       "bold ",
-      "px GothamBold, segoe-ui-emoji"
+      'px GothamBold, "Arial Unicode MS", segoe-ui-emoji'
     );
   } else {
-    context.font = `${songFont} GothamBold, segoe-ui-emoji`;
+    context.font = `${songFont} GothamBold, "Arial Unicode MS", segoe-ui-emoji`;
     context.fillText(songName, songNameX, songNameY);
   }
 
@@ -240,11 +240,11 @@ export async function SpotifyCard(
       "px GothamBook, segoe-ui-emoji"
     );
   } else {
-    context.font = `${songArtistFont} GothamBook, segoe-ui-emoji`;
+    context.font = `${songArtistFont} GothamBook, "Arial Unicode MS", segoe-ui-emoji`;
     context.fillText(artistString, songArtistX, songArtistY);
   }
 
-  context.font = `${bottomTextFont} GothamBold, segoe-ui-emoji`;
+  context.font = `${bottomTextFont} GothamBold, "Arial Unicode MS", segoe-ui-emoji`;
   var cbottomText = bottomText.split("").join(String.fromCharCode(8202));
   context.fillText(cbottomText, bottomTextX, bottomTextY);
   context.fillText((data.listenOn || "meong bot").toUpperCase(), dmX, dmY);

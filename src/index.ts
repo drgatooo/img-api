@@ -8,6 +8,9 @@ registerFont("./assets/Gotham-Black.otf", { family: "GothamBlack" });
 registerFont("./assets/GothamBook.ttf", { family: "GothamBook" });
 registerFont("./assets/GothamMedium.ttf", { family: "GothamMedium" });
 registerFont("./assets/seguiemj.ttf", { family: "segoe-ui-emoji" });
+registerFont("./assets/arial-unicode-ms.ttf", {
+  family: "Arial Unicode MS",
+});
 
 const app = express();
 app.use(cors());
