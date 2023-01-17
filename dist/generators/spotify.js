@@ -130,24 +130,20 @@ function SpotifyCard(data, color, orientation, colorGiven) {
         const fontColor = getFontColor(color, avcolor);
         context.fillStyle = fontColor;
         if (orientation === "landscape") {
-            context.font = "bold 22px GothamBlack, segoe-ui-emoji";
+            context.font = 'bold 22px GothamBlack, "Arial Unicode MS", segoe-ui-emoji';
             var ctext = text.split("").join(String.fromCharCode(8202));
             context.fillText(ctext, songX, songY);
         }
         else if (orientation == "portrait") {
-            context.font = "bold 40px GothamBlack, segoe-ui-emoji";
+            context.font = 'bold 40px GothamBlack, "Arial Unicode MS", segoe-ui-emoji';
             var ctext = text.split("").join(String.fromCharCode(8202));
             context.fillText(ctext, songX, songY);
         }
         if (orientation === "landscape") {
-            songArtistY += textWrap(songName, songFontMax, songFontMin, 580, context, songNameX, songNameY, "bold ", "px GothamBold, segoe-ui-emoji");
+            songArtistY += textWrap(songName, songFontMax, songFontMin, 580, context, songNameX, songNameY, "bold ", 'px GothamBold, "Arial Unicode MS", segoe-ui-emoji');
         }
         else if (orientation === "portrait") {
-            songArtistY += textWrap(songName, songFontMax, songFontMin, 850, context, songNameX, songNameY, "bold ", "px GothamBold, segoe-ui-emoji");
-        }
-        else {
-            context.font = `${songFont} GothamBold, segoe-ui-emoji`;
-            context.fillText(songName, songNameX, songNameY);
+            songArtistY += textWrap(songName, songFontMax, songFontMin, 850, context, songNameX, songNameY, "bold ", 'px GothamBold, "Arial Unicode MS", segoe-ui-emoji');
         }
         artistString = artistList.join(", ");
         if (orientation === "landscape") {
@@ -159,10 +155,9 @@ function SpotifyCard(data, color, orientation, colorGiven) {
             textWrap(artistString, songArtistFontMax, songArtistFontMin, 500, context, songArtistX, songArtistY, "bold ", "px GothamBook, segoe-ui-emoji");
         }
         else {
-            context.font = `${songArtistFont} GothamBook, segoe-ui-emoji`;
-            context.fillText(artistString, songArtistX, songArtistY);
+            context.font = `${songArtistFont} GothamBook, "Arial Unicode MS", segoe-ui-emoji`;
         }
-        context.font = `${bottomTextFont} GothamBold, segoe-ui-emoji`;
+        context.font = `${bottomTextFont} GothamBold, "Arial Unicode MS", segoe-ui-emoji`;
         var cbottomText = bottomText.split("").join(String.fromCharCode(8202));
         context.fillText(cbottomText, bottomTextX, bottomTextY);
         context.fillText((data.listenOn || "meong bot").toUpperCase(), dmX, dmY);
@@ -171,130 +166,41 @@ function SpotifyCard(data, color, orientation, colorGiven) {
 }
 exports.SpotifyCard = SpotifyCard;
 function textWrap(text, max, min, maxWidth, ctx, x, y, fontPre, fontPost) {
-    let currentFontSize;
-    for (currentFontSize = parseInt(max); currentFontSize >= parseInt(min); currentFontSize--) {
-        ctx.font = fontPre + currentFontSize + fontPost;
-        let currentWidth = ctx.measureText(text).width;
-        if (currentWidth < maxWidth) {
+    let words = text.split("");
+    let line = "";
+    let downShift = 0;
+    let font = max;
+    ctx.font = `${fontPre}${font}${fontPost}`;
+    console.log(text.length);
+    for (let n = 0; n < words.length; n++) {
+        let testLine = line + words[n] + "";
+        let metrics = ctx.measureText(testLine);
+        let testWidth = metrics.width;
+        if (testWidth > maxWidth && n > 0) {
+            ctx.font = `${fontPre}${font}${fontPost}`;
+            line = line.substring(0, line.length - 1) + "…";
+            ctx.fillText(line, x, y);
             break;
         }
-    }
-    if (currentFontSize >= parseInt(min)) {
-        ctx.fillText(text, x, y);
-        return 0;
-    }
-    else {
-        for (currentFontSize = parseInt(max); currentFontSize >= parseInt(min); currentFontSize--) {
-            let tobreak = false;
-            ctx.font = fontPre + currentFontSize + fontPost;
-            let words = text.split(" ");
-            let firstLine = words[0];
-            for (let _ = 1; _ < words.length; _++) {
-                let word = words[_];
-                let currentLineWidth = ctx.measureText(firstLine + " " + word).width;
-                if (currentLineWidth < maxWidth) {
-                    firstLine += " " + word;
-                }
-                else {
-                    words = words.splice(_);
-                    let secondLine = words.join(" ");
-                    if (ctx.measureText(secondLine).width < maxWidth) {
-                        tobreak = true;
-                    }
-                    break;
-                }
-            }
-            if (tobreak) {
-                break;
-            }
+        else {
+            line = testLine;
         }
-        if (currentFontSize >= parseInt(min)) {
-            ctx.font = fontPre + currentFontSize + fontPost;
-            let words = text.split(" ");
-            let firstLine = words[0];
-            for (let _ = 1; _ < words.length; _++) {
-                let word = words[_];
-                let currentLineWidth = ctx.measureText(firstLine + " " + word).width;
-                if (currentLineWidth < maxWidth) {
-                    firstLine += " " + word;
-                }
-                else {
-                    ctx.fillText(firstLine, x, y);
-                    let secondLine = words.slice(_).join(" ");
-                    ctx.fillText(secondLine, x, y + currentFontSize);
-                    return currentFontSize;
-                }
-            }
+        if (font > min) {
+            font -= 1;
+            ctx.font = `${fontPre}${font}${fontPost}`;
+        }
+        if (font < min) {
+            font = min;
         }
         else {
-            let words = text.split(" ");
-            let firstLine = words[0];
-            ctx.font = fontPre + min + fontPost;
-            for (let _ = 1; _ < words.length; _++) {
-                let word = words[_];
-                let currentLineWidth = ctx.measureText(firstLine + " " + word).width;
-                if (currentLineWidth < maxWidth) {
-                    firstLine += " " + word;
-                }
-                else {
-                    words = words.splice(_);
-                    let secondLine = words[0];
-                    for (let __ = 1; __ < words.length; __++) {
-                        let word = words[__];
-                        let currentLineWidth = ctx.measureText(secondLine + " " + word).width;
-                        if (currentLineWidth < maxWidth) {
-                            secondLine += " " + word;
-                        }
-                        else {
-                            text = firstLine + " " + secondLine + "...";
-                            break;
-                        }
-                    }
-                    break;
-                }
-            }
-            for (currentFontSize = parseInt(max); currentFontSize >= parseInt(min); currentFontSize--) {
-                let tobreak = false;
-                ctx.font = fontPre + currentFontSize + fontPost;
-                let words = text.split(" ");
-                firstLine = words[0];
-                for (let _ = 1; _ < words.length; _++) {
-                    let word = words[_];
-                    let currentLineWidth = ctx.measureText(firstLine + " " + word).width;
-                    if (currentLineWidth < maxWidth) {
-                        firstLine += " " + word;
-                    }
-                    else {
-                        words = words.splice(_);
-                        let secondLine = words.join(" ");
-                        if (ctx.measureText(secondLine).width < maxWidth) {
-                            tobreak = true;
-                        }
-                        break;
-                    }
-                }
-                if (tobreak) {
-                    break;
-                }
-            }
-            ctx.font = fontPre + currentFontSize + fontPost;
-            words = text.split(" ");
-            firstLine = words[0];
-            for (let _ = 1; _ < words.length; _++) {
-                let word = words[_];
-                let currentLineWidth = ctx.measureText(firstLine + " " + word).width;
-                if (currentLineWidth < maxWidth) {
-                    firstLine += " " + word;
-                }
-                else {
-                    ctx.fillText(firstLine, x, y);
-                    let secondLine = words.slice(_).join(" ");
-                    ctx.fillText(secondLine, x, y + currentFontSize);
-                    return currentFontSize;
-                }
-            }
+            font -= 1;
+        }
+        ctx.font = `${fontPre}${font}${fontPost}`;
+        if (n === words.length - 1) {
+            ctx.fillText(line, x, y);
         }
     }
+    return downShift;
 }
 const isHexCode = function (hex) {
     const allowedChars = [
@@ -333,9 +239,9 @@ const isHexCode = function (hex) {
 };
 function getFontColor(bgcolor, averagecolor) {
     let e = deltaE(hexToRgb(bgcolor), hexToRgb("FFFFFF"));
-    if (e < 10) {
+    if (e < 25) {
         e = deltaE(hexToRgb(bgcolor), hexToRgb(averagecolor));
-        if (e < 10) {
+        if (e < 25) {
             return "#000000";
         }
         else {

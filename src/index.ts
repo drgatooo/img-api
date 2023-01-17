@@ -22,7 +22,7 @@ app.get("/", async (_, res) => {
   return res.json({ hello: "world", date: new Date() });
 });
 
-app.get("/v1/music-card", async (req, res) => {
+app.get("/v2/music-card", async (req, res) => {
   const cover = req.query["cover"] as string;
   const title = req.query["title"] as string;
   const artist = req.query["artist"] as string;

@@ -21,6 +21,9 @@ const canvas_1 = require("canvas");
 (0, canvas_1.registerFont)("./assets/GothamBook.ttf", { family: "GothamBook" });
 (0, canvas_1.registerFont)("./assets/GothamMedium.ttf", { family: "GothamMedium" });
 (0, canvas_1.registerFont)("./assets/seguiemj.ttf", { family: "segoe-ui-emoji" });
+(0, canvas_1.registerFont)("./assets/arial-unicode-ms.ttf", {
+    family: "Arial Unicode MS",
+});
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.listen(process.env["PORT"] || 3000, () => {
@@ -29,7 +32,7 @@ app.listen(process.env["PORT"] || 3000, () => {
 app.get("/", (_, res) => __awaiter(void 0, void 0, void 0, function* () {
     return res.json({ hello: "world", date: new Date() });
 }));
-app.get("/v1/music-card", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.get("/v2/music-card", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     const cover = req.query["cover"];
     const title = req.query["title"];
