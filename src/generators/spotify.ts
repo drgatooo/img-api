@@ -78,7 +78,7 @@ export async function SpotifyCard(
     songX = 560;
     songY = 200;
     songNameX = 560;
-    songNameY = 250;
+    songNameY = 280;
     songFont = "bold 100px";
     songFontMax = "100";
     songFontMin = "55";
