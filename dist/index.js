@@ -26,7 +26,7 @@ const canvas_1 = require("canvas");
 });
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
-app.listen(process.env["PORT"] || 3000, () => {
+app.listen(process.env["PORT"] || 3001, () => {
     console.log("Server is running on port 3000");
 });
 app.get("/", (_, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -61,7 +61,7 @@ app.get("/v2/music-card", (req, res) => __awaiter(void 0, void 0, void 0, functi
             cover: decoded.cover,
             name: decoded.title,
             text: "canción",
-            listenOn: "meong bot",
+            listenOn: decoded.listenOn,
         }, undefined, decoded.orientation, undefined);
         res.writeHead(200, {
             "Content-Type": "image/png",
@@ -104,7 +104,7 @@ app.get("/v1/playlist-card", (req, res) => __awaiter(void 0, void 0, void 0, fun
             cover: decoded.cover,
             name: decoded.title,
             text: "playlist",
-            listenOn: "meong bot",
+            listenOn: decoded.listenOn,
         }, undefined, decoded.orientation, undefined);
         res.writeHead(200, {
             "Content-Type": "image/png",

@@ -44,9 +44,9 @@ function SpotifyCard(data, color, orientation, colorGiven) {
             imageWidth = 400;
             imageHeight = 400;
             songX = 560;
-            songY = 200;
+            songY = 250;
             songNameX = 560;
-            songNameY = 250;
+            songNameY = 290;
             songFont = "bold 100px";
             songFontMax = "100";
             songFontMin = "55";
