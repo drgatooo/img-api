@@ -11,7 +11,7 @@ const encoded = Buffer.from(text).toString("base64");
 
 ## Endpoints
 
-### GET /music-card
+### GET /v2/music-card
 
 Generates a music card image.
 
@@ -22,9 +22,15 @@ Generates a music card image.
 | `title`  | `string` | The title of the song.  |
 | `artist` | `string` | The artist of the song. |
 | `cover`  | `string` | The cover of the song.  |
+| `orientation`  | `"square"\|"portrait"\|"landscape"` | The orientation of the canvas. Default: landscape  |
+| `listen-on`  | `string` | A watermark. Default: Meong Bot (i don't remember xd)  |
+
+> IMPORTANT: All parameters should be encoded to buffer string (except orientation)
+> 
+> Use: `Buffer.from("random string").toString('base64')`
 
 #### Example
 
 ```http
-GET /music-card?title=QU5EUsOTTUVEQQ==&artist=V09T&cover=aHR0cHM6Ly9pLnNjZG4uY28vaW1hZ2UvYWI2NzYxNmQwMDAwYjI3M2JjZTQ5ODdiNjc5MzhhMGEwMGNkZDg1Mw==
+GET /v2/music-card?title=QU5EUsOTTUVEQQ==&artist=V09T&cover=aHR0cHM6Ly9pLnNjZG4uY28vaW1hZ2UvYWI2NzYxNmQwMDAwYjI3M2JjZTQ5ODdiNjc5MzhhMGEwMGNkZDg1Mw==&orientation=square
 ```
